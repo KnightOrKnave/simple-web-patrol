@@ -12,8 +12,15 @@ export class TxtFileReader implements urlListReader{
   }
 
   async readAll(): Promise<string[]>{
-    const f=await fs.promises.readFile(this.filePath,{encoding:'utf-8'});
-    const urls = f.split('\n');
+    let urls:string[]=[];
+    try{
+      const f=await fs.promises.readFile(this.filePath,{encoding:'utf-8'});
+      urls = f.split('\n');
+    }catch(e){
+      console.log("URL一覧取得に失敗");
+    }finally{
+
+    }
     return urls;
   }
 }
