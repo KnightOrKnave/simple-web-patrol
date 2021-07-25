@@ -19,7 +19,6 @@ export class TxtFileReader implements urlListReader{
     }catch(e){
       console.log("URL一覧取得に失敗");
     }finally{
-
     }
     return urls;
   }
