@@ -4,6 +4,7 @@ import { BlowserSiteAccesser } from './siteAccesser';
 import { patrolJob } from './main';
 import { ConsoleLogger } from './accessLogger';
 
+
 async function handler(){
   const rd=new TxtFileReader(`${__dirname}/../data/input.txt`);
   const ac = new BlowserSiteAccesser();
