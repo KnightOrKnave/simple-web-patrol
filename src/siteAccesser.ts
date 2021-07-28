@@ -15,6 +15,7 @@ export class BlowserSiteAccesser implements siteAccesser {
   constructor() {
     this.browseType = "firefox";
   }
+
   async access(targetUrl: string): Promise<accessResult> {
     const brower = await firefox.launch();
     let title:string="";
