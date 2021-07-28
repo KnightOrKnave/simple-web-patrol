@@ -23,3 +23,10 @@ export class TxtFileReader implements urlListReader{
     return urls;
   }
 }
+
+export class WebsiteLinkReader implements urlListReader{
+  readAll(): Promise<string[]> {
+    throw new Error('Method not implemented.');
+  }
+
+}
