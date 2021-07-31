@@ -44,7 +44,7 @@ export class WebsiteLinkReader implements urlListReader {
     if(!res?.ok){
       return [];
     }
-    const linkUrls = page.$$eval('a',(links)=>links.map((l)=>l.href));
-    return linkUrls;
+    const linkUrls = await page.$$eval('a',(links)=>links.map((l)=>l.href));
+    return await linkUrls.filter((l)=>!l.startsWith(this.targetUrl));
   }
 }

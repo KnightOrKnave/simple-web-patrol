@@ -2,7 +2,7 @@ import http from "http";
 import { TxtFileReader, WebsiteLinkReader } from "../src/urlListReader";
 
 function generateHtmlLinkList(linkList: string[]): string {
-  const aTags = linkList.map((a) => `<a href="${a}>link here</a>`);
+  const aTags = linkList.map((a) => `<a href="${a}">link here</a>`);
   const tg = aTags.join("\n");
   const resHtml = `
 <!DOCTYPE html>
@@ -43,15 +43,19 @@ test("異常系_ファイルがない", async () => {
 test(
   "正常_websiteReader_read",
   async () => {
+    const correct=['https://example.com/','http://example.com/aaa/bbb?a=bcdfjawiehfpiipo','http://google.com/'];
+    //expect+同じドメインの物(同じドメインのリンクは除外する)
+    const inputList=['http://localhost:10045/hoge'].concat(correct);
     const server = http
       .createServer((req, res) => {
-        res.end;
+        const html = generateHtmlLinkList(inputList)
+        res.end(html);
       })
       .listen(10045);
 
-    const rd = new WebsiteLinkReader("https://localhost:10045");
+    const rd = new WebsiteLinkReader("http://localhost:10045");
     const actual = await rd.readAll();
-    console.log(actual);
+    expect(actual).toEqual(correct)
   },
   15 * 1000
 );
