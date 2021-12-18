@@ -45,7 +45,8 @@ test(
   async () => {
     const correct=['https://example.com/','http://example.com/aaa/bbb?a=bcdfjawiehfpiipo','http://google.com/'];
     //expect+同じドメインの物(同じドメインのリンクは除外する)
-    const inputList=['http://localhost:10045/hoge'].concat(correct);
+    //パス違いも除外
+    const inputList=['http://localhost:10045/hoge','http://localhost:10045'].concat(correct);
     const server = http
       .createServer((req, res) => {
         const html = generateHtmlLinkList(inputList)
@@ -53,7 +54,27 @@ test(
       })
       .listen(10045);
 
-    const rd = new WebsiteLinkReader("http://localhost:10045");
+    const rd = new WebsiteLinkReader("http://localhost:10045/huga",true);
+    const actual = await rd.readAll();
+    expect(actual).toEqual(correct)
+  },
+  15 * 1000
+);
+
+test(
+  "正常_websiteReader_read_flag_false",
+  async () => {
+    const correct=['http://localhost:10046/hoge','http://localhost:10046/','https://example.com/','http://example.com/aaa/bbb?a=bcdfjawiehfpiipo','http://google.com/'];
+    //expect+同じドメインの物(同じドメインのリンクは除外する)
+    //パス違いも除外
+    const server = http
+      .createServer((req, res) => {
+        const html = generateHtmlLinkList(correct)
+        res.end(html);
+      })
+      .listen(10046);
+
+    const rd = new WebsiteLinkReader("http://localhost:10046/huga",false);
     const actual = await rd.readAll();
     expect(actual).toEqual(correct)
   },
