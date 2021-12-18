@@ -15,6 +15,18 @@ async function handler(mode: string, crawlTarget?: string) {
   } else if (mode === "lateral" && crawlTarget) {
     const rd = new WebsiteLinkReader(crawlTarget);
     patrolJob(rd, ac, lg);
+  } else if (mode ==="oneshot"){
+    const rd = new TxtFileReader(`${__dirname}/../data/input.txt`);
+    patrolJob(rd, ac, lg);
+  } else {
+    console.log(`
+    ts-node src/index.ts <sub command>
+
+    **sub commands**
+    patrol:        access to sites  in data/input.txt every hour
+    lateral <url>: access to sites in Argument url links
+    single:        access to sites in data/input.txt one time
+    `)
   }
 }
 
