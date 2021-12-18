@@ -1,4 +1,5 @@
 import fs from "fs";
+import url from "url";
 import { firefox } from "playwright";
 
 export interface urlListReader {
@@ -30,10 +31,12 @@ export class TxtFileReader implements urlListReader {
 export class WebsiteLinkReader implements urlListReader {
   targetUrl: string;
   browseType: string;
+  onlyExtractDomain: boolean;
 
-  constructor(_targetUrl: string) {
+  constructor(_targetUrl: string, _onlyExtract: boolean) {
     this.targetUrl = _targetUrl;
     this.browseType = "firefox";
+    this.onlyExtractDomain=_onlyExtract;
   }
 
   async readAll(): Promise<string[]> {
@@ -46,6 +49,10 @@ export class WebsiteLinkReader implements urlListReader {
     }
     const linkUrls = await page.$$eval('a',(links)=>links.map((l)=>l.href));
     await brower.close();
-    return await linkUrls.filter((l)=>!l.startsWith(this.targetUrl));
+    return await linkUrls.filter((l)=>{
+        const f = new url.URL(l);
+        const s = new url.URL(this.targetUrl);
+        return !this.onlyExtractDomain || f.hostname != s.hostname;
+    });
   }
 }

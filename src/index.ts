@@ -14,7 +14,7 @@ async function handler(argv: any) {
       patrolJob(rd, ac, lg, argv.interval);
     });
   } else if (argv._[0] === "lateral" && argv["targetUrl"]) {
-    const rd = new WebsiteLinkReader(argv["targetUrl"]);
+    const rd = new WebsiteLinkReader(argv["targetUrl"], argv.external);
     patrolJob(rd, ac, lg, argv.interval);
   } else if (argv._[0] === "oneshot") {
     const rd = new TxtFileReader(`${__dirname}/../data/input.txt`);
@@ -25,7 +25,7 @@ async function handler(argv: any) {
 }
 
 const argv = yargs
-  .command("patrol", "access to sites  in data/input.txt every hour")
+  .command("patrol", "access to sites in data/input.txt every hour")
   .command("oneshot", "access to sites in data/input.txt one time")
   .command(
     "lateral <targetUrl>",
@@ -50,6 +50,22 @@ const argv = yargs
     description: "access interval seconds",
     demandOption: false,
     default: 60,
+    number: true,
+  })
+  .option("unique", {
+    alias: "u",
+    type: "boolean",
+    description: "Fllow links that only unique url",
+    demandOption: false,
+    default: false,
+    number: true,
+  })
+  .option("external", {
+    alias: "e",
+    type: "boolean",
+    description: "Follow links that only external domain",
+    demandOption: false,
+    default: true,
     number: true,
   })
   .check((argv) => {
