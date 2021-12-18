@@ -26,6 +26,7 @@ export class BlowserSiteAccesser implements siteAccesser {
       const res = await page.goto(targetUrl);
       title = await page.title();
       status = res?.statusText() || "-";
+      const linkUrls = await page.$$eval('a',(links)=>links.map((l)=>l.href));
     } catch (e) {
       console.log(`取得失敗:${targetUrl}`)
     } finally {
