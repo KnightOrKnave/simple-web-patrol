@@ -11,14 +11,14 @@ async function handler(argv: any) {
   if (argv._[0] === "patrol") {
     const rd = new TxtFileReader(`${__dirname}/../data/input.txt`);
     cron.schedule("0 * * * *", async () => {
-      patrolJob(rd, ac, lg, argv.interval);
+      patrolJob(rd, ac, lg, argv.interval, argv.depth);
     });
   } else if (argv._[0] === "lateral" && argv["targetUrl"]) {
     const rd = new WebsiteLinkReader(argv["targetUrl"], argv.external);
-    patrolJob(rd, ac, lg, argv.interval);
+    patrolJob(rd, ac, lg, argv.interval, argv.depth);
   } else if (argv._[0] === "oneshot") {
     const rd = new TxtFileReader(`${__dirname}/../data/input.txt`);
-    patrolJob(rd, ac, lg, argv.interval);
+    patrolJob(rd, ac, lg, argv.interval, argv.depth);
   } else {
     console.log(`invalid paramaters`);
   }
