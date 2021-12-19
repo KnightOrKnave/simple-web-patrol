@@ -41,6 +41,8 @@ export class BlowserSiteAccesser implements siteAccesser {
         }catch(e){}
         return false;
       });
+    } catch(e){
+
     } finally {
       await brower.close();
     }
