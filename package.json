@@ -29,6 +29,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "loglevel": "^1.8.0",
     "node-cron": "^3.0.0",
     "playwright": "^1.13.0",
     "yargs": "^17.3.0"

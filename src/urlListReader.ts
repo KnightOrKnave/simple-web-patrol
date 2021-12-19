@@ -36,7 +36,7 @@ export class WebsiteLinkReader implements urlListReader {
   constructor(_targetUrl: string, _onlyExtract: boolean) {
     this.targetUrl = _targetUrl;
     this.browseType = "firefox";
-    this.onlyExtractDomain=_onlyExtract;
+    this.onlyExtractDomain = _onlyExtract;
   }
 
   async readAll(): Promise<string[]> {
@@ -44,15 +44,22 @@ export class WebsiteLinkReader implements urlListReader {
     const context = await brower.newContext();
     const page = await context.newPage();
     const res = await page.goto(this.targetUrl);
-    if(!res?.ok){
+    if (!res?.ok) {
       return [];
     }
-    const linkUrls = await page.$$eval('a',(links)=>links.map((l)=>l.href));
+    const linkUrls = await page.$$eval("a", (links) =>
+      links.map((l) => l.href)
+    );
     await brower.close();
-    return await linkUrls.filter((l)=>{
+    return await linkUrls.filter((l) => {
+      try {
         const f = new url.URL(l);
         const s = new url.URL(this.targetUrl);
         return !this.onlyExtractDomain || f.hostname != s.hostname;
+      } catch (e) {
+        //console.log(`error: ${l}`);
+      }
+      return false;
     });
   }
 }

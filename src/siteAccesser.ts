@@ -34,12 +34,13 @@ export class BlowserSiteAccesser implements siteAccesser {
       );
       //extract only external domain
       linkUrls = linkUrlsBase.filter((_) => {
-        const f = new url.URL(_);
-        const s = new url.URL(targetUrl);
-        return f.hostname != s.hostname;
+        try{
+          const f = new url.URL(_);
+          const s = new url.URL(targetUrl);
+          return f.hostname != s.hostname;
+        }catch(e){}
+        return false;
       });
-    } catch (e) {
-      console.log(`取得失敗:${targetUrl}`);
     } finally {
       await brower.close();
     }
